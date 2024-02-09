@@ -1,0 +1,116 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+// Clase que representa una carta de poker
+class Carta {
+    private String palo; // Palo: tréboles, corazones, picas o diamantes
+    private String color; // Color: rojo, negro
+    private String valor; // Valor: 2 al 10, A, J, Q o K
+
+    public Carta(String palo, String color, String valor) {
+        this.palo = palo;
+        this.color = color;
+        this.valor = valor;
+    }
+
+    public String getPalo() {
+        return palo;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+}
+
+// Clase que representa un conjunto de cartas de poker
+class Mazo {
+    private List<Carta> cartas;
+
+    public Mazo() {
+        this.cartas = new ArrayList<>();
+        inicializarMazo();
+    }
+
+    // Inicializa el mazo con las 52 cartas de poker
+    private void inicializarMazo() {
+        String[] palos = {"Tréboles", "Corazones", "Picas", "Diamantes"};
+        String[] valores = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "A", "J", "Q", "K"};
+
+        for (String palo : palos) {
+            for (String valor : valores) {
+                cartas.add(new Carta(palo, obtenerColor(palo), valor));
+            }
+        }
+    }
+
+    // Método para obtener el color de una carta basado en su palo
+    private String obtenerColor(String palo) {
+        return (palo.equals("Corazones") || palo.equals("Diamantes")) ? "Rojo" : "Negro";
+    }
+
+    // Mezcla el mazo
+    public void mezclar() {
+        Collections.shuffle(cartas);
+        System.out.println("Se mezcló el Mazo.");
+    }
+
+    // Muestra la primera carta del mazo y la elimina
+    public void cabeza() {
+        if (!cartas.isEmpty()) {
+            Carta carta = cartas.remove(0);
+            System.out.println(carta.getPalo() + "," + carta.getColor() + "," + carta.getValor());
+            System.out.println("Quedan " + cartas.size() + " cartas en el mazo");
+        } else {
+            System.out.println("El mazo está vacío.");
+        }
+    }
+
+    // Selecciona una carta al azar del mazo y la elimina
+    public void escoger() {
+        if (!cartas.isEmpty()) {
+            Random random = new Random();
+            int indice = random.nextInt(cartas.size());
+            Carta carta = cartas.remove(indice);
+            System.out.println(carta.getPalo() + "," + carta.getColor() + "," + carta.getValor());
+            System.out.println("Quedan " + cartas.size() + " cartas en el mazo");
+        } else {
+            System.out.println("El mazo está vacío.");
+        }
+    }
+
+    // Devuelve un arreglo de cinco cartas del mazo y las elimina
+    public void mano() {
+        if (cartas.size() < 5) {
+            System.out.println("No hay suficientes cartas en el mazo para repartir una mano.");
+            return;
+        }
+
+        for (int i = 0; i < 5; i++) {
+            Carta carta = cartas.remove(0);
+            System.out.println(carta.getPalo() + "," + carta.getColor() + "," + carta.getValor());
+        }
+        System.out.println("Quedan " + cartas.size() + " cartas en el mazo");
+    }
+}
+
+public class Principal {
+    public static void main(String[] args) {
+        Mazo mazo = new Mazo();
+        mazo.mezclar();
+
+        System.out.println("\nMostrando la cabeza del mazo:");
+        mazo.cabeza();
+
+        System.out.println("\nSeleccionando una carta al azar:");
+        mazo.escoger();
+
+        System.out.println("\nRepartiendo una mano de cartas:");
+        mazo.mano();
+    }
+}
